@@ -5,6 +5,7 @@
  */
 package Ventanas;
 
+import Connected.ValidaLogin;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
@@ -80,7 +81,9 @@ public class Login {
         
         
         login.setOnAction(e->{
-            Cargar_Scene(new Principal().getRoot(),"Bienvenido", 1500,1500);
+                ValidaLogin vl= new ValidaLogin(txtUser.getText().trim(),txtKey.getText().trim());
+                if(vl.accionIngresar()==true)
+                    Cargar_Scene(new Principal().getRoot(),"Bienvenido", 1500,1500);
         });
         
         

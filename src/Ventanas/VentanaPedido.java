@@ -39,12 +39,13 @@ public class VentanaPedido {
     private Label ced,nroFactura,pro,cant,pla;
     private Button agregar,verFactura;
     private ComboBox<String> tipoProducto = new ComboBox<>();
-    public static ArrayList<DetalleOrden> pedidos = new ArrayList<>() ;
+    public static ArrayList<DetalleOrden> pedidos  ;
     private Conexion conectar ;
     
     private static int i = 1;
     
     public VentanaPedido(){
+        pedidos= new ArrayList<>();
          conectar = new Conexion();
          root = new VBox();
          fCedula = new VBox();
@@ -147,17 +148,28 @@ public class VentanaPedido {
          agregar.setOnAction(e->{
              
              if (tipoProducto.getValue().equalsIgnoreCase("OTRO")) {
+                 System.out.println("a");
+                 System.out.println(producto.getText());
                  String[] busquedaProducto = consultarProducto(producto.getText());
+                 
+                 System.out.println(busquedaProducto[2]);
                  String[] busquedaPromocion = consultarPromocion(busquedaProducto[1]);
-                 DetalleOrden Do = new DetalleOrden(Integer.toString(i), factura.getText(), producto.getText(), Integer.parseInt(cantidad.getText()),Float.parseFloat(busquedaProducto[3]) ,busquedaPromocion[0]);
+                 String codigoDetalleOrden =Integer.toString(i);
+                 System.out.println(codigoDetalleOrden);
+                 String idFactura = factura.getText();
+                 System.out.println(idFactura);
+                 String idProducto = producto.getText();
+                 System.out.println(idProducto);
+                 int cantidadProducto=Integer.parseInt(cantidad.getText());
+                 System.out.println(cantidadProducto);
+                 float precio = Float.parseFloat(busquedaProducto[4]);
+                 System.out.println(precio);
+                 String porcentajePromocion = busquedaPromocion[2];
+                 System.out.println(porcentajePromocion);
+                 DetalleOrden Do = new DetalleOrden(codigoDetalleOrden, idFactura, idProducto, cantidadProducto,precio ,porcentajePromocion);
                  pedidos.add(Do);
-
                  i++;
-
-                 producto.clear();
-                 cantidad.clear();
-             }
-             else{
+                 
                  
              }
              
@@ -189,7 +201,7 @@ public class VentanaPedido {
     }
     
      public String[] consultarProducto(String idProducto) {
-        String[] datos= new String[7];
+        String[] datos= new String[8];
         try {
             Statement s = conectar.getConection().createStatement();
             ResultSet rs = s.executeQuery ("select * from producto");
@@ -198,10 +210,11 @@ public class VentanaPedido {
                     datos[0]=rs.getString(1);
                     datos[1]=rs.getString(2);
                     datos[2]=rs.getString(3);
-                    datos[3]=Float.toString(rs.getFloat(4));
+                    datos[3]=rs.getString(4);
                     datos[4]=Float.toString(rs.getFloat(5));
-                    datos[5]=rs.getString(6);      
-                    datos[6]=Integer.toString(rs.getInt(7));
+                    datos[5]=Float.toString(rs.getFloat(6));
+                    datos[6]=rs.getString(7);      
+                    datos[7]=Integer.toString(rs.getInt(8));
                 }
             }
             

@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -46,47 +48,48 @@ public class VentanaOrden {
     private HBox cabezera;
     private Label fecha,cliente,direccion,telefono,total;
     private Label factura,facturaId;
-    private TableView tableView ;
+    private TableView<Info> tableView ;
+    private ObservableList<Info> obList;
     private Conexion conectar;
     
     public VentanaOrden(){
-        
+        conectar = new Conexion();
         root = new BorderPane();
         cabezeraIzquierda = new VBox();
         cabezeraDerecha = new VBox();
         cabezera = new HBox();
         tableView = new TableView();
+        obList= FXCollections.observableArrayList();
         
         
-        TableColumn<String, String> column1 = new TableColumn<>("Codigo");
-        column1.setCellValueFactory(new PropertyValueFactory<>("codigo"));
+        TableColumn<Info,String> column1 = new TableColumn("Codigo");
+        column1.setCellValueFactory(new PropertyValueFactory<>("Codigo"));
+       
+        TableColumn<Info,String>  column2 = new TableColumn("Producto");
+        column2.setCellValueFactory(new PropertyValueFactory<>("Prodcuto"));
         
-        tableView.getItems().add(VentanaPedido.pedidos.get(3));
+        TableColumn<Info,Integer>  column3 = new TableColumn("Cantidad");
+        column3.setCellValueFactory(new PropertyValueFactory<>("Cantidad"));
 
-        TableColumn<String, String> column2 = new TableColumn<>("Producto");
-        column2.setCellValueFactory(new PropertyValueFactory<>("prodcuto"));
-        
-        TableColumn<String, String> column3 = new TableColumn<>("Cantidad");
-        column3.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
 
-
-        TableColumn<String, String> column4 = new TableColumn<>("Precio Unitario");
+        TableColumn<Info,Double>  column4 = new TableColumn("Precio Unitario");
         column4.setCellValueFactory(new PropertyValueFactory<>("Precio Unitario"));
         
-        TableColumn<String, String> column5 = new TableColumn<>("Descuento");
+        TableColumn <Info,Double> column5 = new TableColumn("Descuento");
         column5.setCellValueFactory(new PropertyValueFactory<>("Descuento"));
         
-        TableColumn<String, String> column6 = new TableColumn<>("Subtotal");
+        TableColumn<Info,Double> column6 = new TableColumn("Subtotal");
         column6.setCellValueFactory(new PropertyValueFactory<>("Subtotal"));
-
-
-        TableColumn<String, String> column7 = new TableColumn<>("IVA");
-        column7.setCellValueFactory(new PropertyValueFactory<>("IVA"));
         
-        TableColumn<String, String> column8 = new TableColumn<>("TOTAL");
-        column8.setCellValueFactory(new PropertyValueFactory<>("TOTAL"));
+        tableView.getColumns().addAll(column1,column2,column3,column4,column5,column6);
         
-        tableView.getColumns().addAll(column1,column2,column3,column4,column5,column6,column7,column8);
+        for(DetalleOrden d: VentanaPedido.pedidos){
+            String[] s = consultarProducto(d.getIdProducto());
+            obList.add(new Info(d.getIdProducto(),s[3],d.getCantidad(),d.getPrecio(),Double.parseDouble(d.getIdPromocion()),d.getPrecio()-(d.getPrecio()*Double.parseDouble(d.getIdPromocion()))));
+            
+        tableView.setItems(obList);
+        }
+        
         tableView.setPrefHeight(50);
         root.setCenter(tableView);
         
@@ -109,7 +112,6 @@ public class VentanaOrden {
         factura.setFont(Font.font("Arial", 20));
         
         facturaId = new Label("");
-        facturaId.setText(new VentanaPedido().getPedidos().get(0).getIdOrden());
         facturaId.setFont(Font.font("Arial", 15));
         facturaId.setAlignment(Pos.CENTER);
         
@@ -151,7 +153,7 @@ public class VentanaOrden {
         return root;
     }
     public String[] consultarProducto(String idProducto) {
-        String[] datos= new String[6];
+        String[] datos= new String[8];
         try {
             Statement s = conectar.getConection().createStatement();
             ResultSet rs = s.executeQuery ("select * from producto");
@@ -161,8 +163,10 @@ public class VentanaOrden {
                     datos[1]=rs.getString(2);
                     datos[2]=rs.getString(3);
                     datos[3]=rs.getString(4);
-                    datos[4]=rs.getString(5);
-                    datos[5]=rs.getString(6);      
+                    datos[4]=Float.toString(rs.getFloat(5));
+                    datos[5]=Float.toString(rs.getFloat(6));
+                    datos[6]=rs.getString(7);      
+                    datos[7]=Integer.toString(rs.getInt(8));
                 }
             }
             
