@@ -55,9 +55,9 @@ public class Principal {
              factura.setFitHeight(300);
              factura.setFitWidth(300);
              
-             con1.getChildren().addAll(factura, new Label("Orden de venta"));
+             con1.getChildren().addAll(factura, new Label("Pedido"));
              con1.setOnMouseClicked(e->{
-                 Cargar_Scene(new VentanaOrden().getRoot(),"Orden de venta", 1500, 1500);
+                 Cargar_Scene(new VentanaPedido().getRoot(),"Pedido", 400, 420);
              
              });
              
@@ -80,7 +80,7 @@ public class Principal {
              
              con3.getChildren().addAll(clientes, new Label ("Cliente"));
              con3.setOnMouseClicked(e->{
-                 Cargar_Scene(new VentanaCliente().getRoot(),"Cliente", 1500, 1500);
+                 Cargar_Scene(new VentanaPedido().getRoot(),"Cliente", 1500, 1500);
              
              });
              
@@ -118,7 +118,6 @@ public class Principal {
         st.setWidth(width);
         st.setHeight(heigth);
     }
-    
     
     
      

@@ -27,5 +27,14 @@ public class Producto {
         this.tipoProducto = tipoProducto;
         this.stock = stock;
     }
+
+    public Producto(String idProducto, String nombreProducto, float precio, float iva, String tipoProducto, int stock) {
+        this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
+        this.precio = precio;
+        this.iva = iva;
+        this.tipoProducto = tipoProducto;
+        this.stock = stock;
+    }
     
 }

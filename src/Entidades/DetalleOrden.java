@@ -16,6 +16,15 @@ public class DetalleOrden {
     private int cantidad;
     private double precio;
     private String idPromocion;
+    
+    public DetalleOrden(String idDetalle, String idOrden, String idProducto, int cantidad, double precio) {
+        this.idDetalle = idDetalle;
+        this.idOrden = idOrden;
+        this.idProducto = idProducto;
+        this.cantidad = cantidad;
+        this.precio = precio;
+    }
+    
 
     public DetalleOrden(String idDetalle, String idOrden, String idProducto, int cantidad, double precio, String idPromocion) {
         this.idDetalle = idDetalle;
@@ -25,6 +34,35 @@ public class DetalleOrden {
         this.precio = precio;
         this.idPromocion = idPromocion;
     }
-    
+
+    @Override
+    public String toString() {
+        return  idOrden ;
+    }
+
+    public String getIdDetalle() {
+        return idDetalle;
+    }
+
+    public String getIdOrden() {
+        return idOrden;
+    }
+
+    public String getIdProducto() {
+        return idProducto;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public String getIdPromocion() {
+        return idPromocion;
+    }
+
     
 }
